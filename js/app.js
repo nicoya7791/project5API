@@ -1,7 +1,8 @@
 
 const userUrl = 'https://randomuser.me/api/?results=12&nat=US';
 const userDiv = document.querySelector('#gallery');
-const searchDiv = document.querySelector('.search-container')
+const searchDiv = document.querySelector('.search-container');
+
 
 
 /**
@@ -63,9 +64,12 @@ function displayHTML(users) {
         `
         //event listerner to each card and creates modal window
         userCard.addEventListener('click', (e) => {
+            let cardIndex = users.results.indexOf(user);
             createModalWindow();
-            usersArray.then(modalWindowContent);
+            modalWindowContent(user);
+            prevNextButton(users, cardIndex);
         });
+
 
     });
 
@@ -103,9 +107,10 @@ function createModalWindow() {
     userDiv.insertAdjacentHTML('beforeend', modalHTML);
     closeModalWindow();
 
+
 };
 
-/**
+/** close modal window.
  *  Function to remove the modal window on click of close button, function is called in createModalWindow.
  */
 function closeModalWindow() {
@@ -116,17 +121,57 @@ function closeModalWindow() {
     })
 };
 
+/**
+ * 
+ * @param {object} users manage the next and previous buttons functionality
+ */
+function prevNextButton(users, index) {
+    let currentCardIndex = index;
+    let next = document.querySelector('#modal-next');
+    let previous = document.querySelector('#modal-prev');
+    // Next button functionality
+    next.addEventListener('click', () => {
+        if (currentCardIndex >= 0 && currentCardIndex < 11) {
+            currentCardIndex++;
+            let user = users.results[currentCardIndex];
+            modalWindowContent(user);
+        } else {
+            currentCardIndex = 0;
+            let user = users.results[currentCardIndex];
+            modalWindowContent(user);
+        }
+
+    });
+    // previous button functionality
+    previous.addEventListener('click', () => {
+        if (currentCardIndex > 0 && currentCardIndex < 11) {
+            currentCardIndex--;
+            let user = users.results[currentCardIndex];
+            modalWindowContent(user);
+        } else {
+            currentCardIndex = 11;
+            let user = users.results[currentCardIndex];
+            modalWindowContent(user);
+        }
+        console.log('this is index: ' + currentCardIndex);
+
+    });
+
+
+
+
+};
+
 
 /**
  * =====================================
  * @param {object} updates user information in the modal window
- * for now only display index 0, i need to loop throught the array of opbject and update when clink next or prev
- *====================================*/
+ * an peson/user object will be passed as a para from the map() fucntion on displayHTML(); 
+ *  *====================================*/
 function modalWindowContent(users) {
-    let userIndex = 0;
     let modalInfo = document.querySelector('.modal-info-container')
     console.log(modalInfo);
-    let user = users.results[userIndex];
+    let user = users;
     let address = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode} `;
     let birthDay = new Date(user.dob.date);
     let month = birthDay.getMonth() + 1;
