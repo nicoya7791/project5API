@@ -35,7 +35,7 @@ let usersArray = getRandomUsers(userUrl);
 usersArray
     .then(displayHTML)
     .catch(e => {
-        userDiv.innerHTML = '<h2>something went wrong</h2>';
+        userDiv.innerHTML = '<h2>something went really wrong!</h2>';
         console.log(e)
     });
 
@@ -170,7 +170,6 @@ function prevNextButton(users, index) {
  *  *====================================*/
 function modalWindowContent(users) {
     let modalInfo = document.querySelector('.modal-info-container')
-    console.log(modalInfo);
     let user = users;
     let address = `${user.location.street.number} ${user.location.street.name}, ${user.location.city}, ${user.location.state} ${user.location.postcode} `;
     let birthDay = new Date(user.dob.date);
@@ -178,7 +177,6 @@ function modalWindowContent(users) {
     let day = birthDay.getDay();
     let year = birthDay.getFullYear();
     let dob = month + '/' + day + '/' + year;
-    console.log(user);
     const content = `
     <img class="modal-img" src = ${user.picture.large} alt = "profile picture" >
     <h3 id="name" class="modal-name cap">${user.name.first} ${user.name.last}</h3>
@@ -199,14 +197,42 @@ function modalWindowContent(users) {
 
 
 /**
- *  1. create function to handle the next button and previous button
- *      a. when click next or previous update the modal window information.
- *      b. need to increment the index by one or redue index by one
- *      c. how to pass the index to create modal window content?
- *      d. handle the when the index is 0 or last index data.lenth
- *      f. create event listener to close window when clicked outside the window(check if this is a requirement)
+ *  create filter function to be used in search box
+ */
+const input = document.querySelector('#search-input');
+const submit = document.querySelector('#search-submit');
+
+// event listener on click search for input value
+submit.addEventListener('click', () => {
+    searchUsers();
+});
+
+// event listener on keyup, search for input value
+
+input.addEventListener('keyup', () => {
+    searchUsers();
+});
+
+
+
+function searchUsers() {
+
+    const usersNames = document.querySelectorAll('#name');
+    const inputValue = input.value.toLowerCase();
+
+    for (let name of usersNames) {
+        if (name !== 0 && name.innerHTML.toLowerCase().includes(inputValue)) {
+            name.parentNode.parentNode.style.display = 'inherit';
+        } else {
+            name.parentNode.parentNode.style.display = 'none';
+            //userDiv.innerHTML = '<h2>something went really wrong!</h2>';
+
+        };
+
+    };
+}
+/**
  *
- *  2. create filter funtion then create event listener on key up to search the names of employees.
- *
+ *  2. add background color, shadow or background color.
  *
  */
