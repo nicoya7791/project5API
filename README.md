@@ -1,4 +1,4 @@
-# project 5 api request fo 12 random user of employees with US Nationality
+# Project 5: API request for 12 random users or employees with US Nationality.
 
 
 In the style.css file, on line 22-25 and line 100-101, I added code to transition from one color to another. 
