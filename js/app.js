@@ -3,7 +3,8 @@ const userUrl = 'https://randomuser.me/api/?results=12&nat=US';
 const userDiv = document.querySelector('#gallery');
 const searchDiv = document.querySelector('.search-container');
 
-
+// change background color of the page.
+document.querySelector('body').style.background = '#CFEFA8';
 
 /**
   fetch request function. takes an URL return a promise in json format
@@ -18,7 +19,7 @@ async function getJSON(url) {
 }
 
 /**
- * get random users profiles in an array. results holds those 12 objects from USA, returns a promise
+ * get random users profiles in an array. returns a promise with 12 objects from US nationality.
  */
 
 async function getRandomUsers(url) {
@@ -41,16 +42,16 @@ usersArray
 
 
 /**==============================================
- *  Generate the html to display the users information
+ *  Generate the html to display the users information, function is called on the request response.
  *=============================================*/
 
 function displayHTML(users) {
-    //interate through every user in the array
+    //interate through every user in the array to create a card with user information
     users.results.map(user => {
         const userCard = document.createElement('div');
         userDiv.appendChild(userCard);
         userCard.innerHTML = `
-            <div class="card">
+            <div style = 'background: #fdf6e3' class="card">
                     <div class="card-img-container">
                         <img class="card-img" src= ${user.picture.large} alt="profile picture">
                     </div>
@@ -62,7 +63,8 @@ function displayHTML(users) {
             </div>
 
         `
-        //event listerner to each card and creates modal window
+        //event listerner to each card and creates modal window. calls function to update user information
+
         userCard.addEventListener('click', (e) => {
             let cardIndex = users.results.indexOf(user);
             createModalWindow();
@@ -87,7 +89,7 @@ const searchBar = `
 searchDiv.insertAdjacentHTML('beforeend', searchBar);
 
 /**======================================
- * Create modal window html.
+ * Create modal window html. function is call in the displayHTML function
  *=========================================*/
 function createModalWindow() {
     let modalHTML = `
@@ -111,7 +113,7 @@ function createModalWindow() {
 };
 
 /** close modal window.
- *  Function to remove the modal window on click of close button, function is called in createModalWindow.
+ *  Function to remove the modal window on click of close button, function is called in createModalWindow function
  */
 function closeModalWindow() {
     const closeBtn = document.querySelector('#modal-close-btn');
@@ -124,6 +126,8 @@ function closeModalWindow() {
 /**
  * 
  * @param {object} users manage the next and previous buttons functionality
+ *  on click updates the information of the user base on the object index, function is call in the displayHTML()
+ *  when last user has been riched reassigns the index value to 0 or 11 to start from first or last object again.
  */
 function prevNextButton(users, index) {
     let currentCardIndex = index;
@@ -144,7 +148,7 @@ function prevNextButton(users, index) {
     });
     // previous button functionality
     previous.addEventListener('click', () => {
-        if (currentCardIndex > 0 && currentCardIndex < 11) {
+        if (currentCardIndex > 0 && currentCardIndex <= 11) {
             currentCardIndex--;
             let user = users.results[currentCardIndex];
             modalWindowContent(user);
@@ -153,12 +157,8 @@ function prevNextButton(users, index) {
             let user = users.results[currentCardIndex];
             modalWindowContent(user);
         }
-        console.log('this is index: ' + currentCardIndex);
 
     });
-
-
-
 
 };
 
@@ -166,7 +166,7 @@ function prevNextButton(users, index) {
 /**
  * =====================================
  * @param {object} updates user information in the modal window
- * an peson/user object will be passed as a para from the map() fucntion on displayHTML(); 
+ * a peson/user object will be passed as a para from the map() fucntion in displayHTML() function; 
  *  *====================================*/
 function modalWindowContent(users) {
     let modalInfo = document.querySelector('.modal-info-container')
@@ -193,9 +193,6 @@ function modalWindowContent(users) {
     modalInfo.innerHTML = content;
 }
 
-
-
-
 /**
  *  create filter function to be used in search box
  */
@@ -214,25 +211,22 @@ input.addEventListener('keyup', () => {
 });
 
 
-
+/**
+ *  search bar functionality.
+ */
 function searchUsers() {
-
     const usersNames = document.querySelectorAll('#name');
     const inputValue = input.value.toLowerCase();
 
     for (let name of usersNames) {
         if (name !== 0 && name.innerHTML.toLowerCase().includes(inputValue)) {
-            name.parentNode.parentNode.style.display = 'inherit';
+
+            name.parentNode.parentNode.style.display = 'flex';
+
         } else {
             name.parentNode.parentNode.style.display = 'none';
-            //userDiv.innerHTML = '<h2>something went really wrong!</h2>';
-
         };
 
     };
+
 }
-/**
- *
- *  2. add background color, shadow or background color.
- *
- */
